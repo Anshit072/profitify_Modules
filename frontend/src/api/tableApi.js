@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8000";
+const BASE_URL = "https://profitify-modules.onrender.com";
 
 export const fetchTables = async () => {
   const res = await fetch(`${BASE_URL}/tables`);

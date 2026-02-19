@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { fetchTables, fetchTableData } from "../api/tableApi";
 
 export default function TableViewer() {
   const [tables, setTables] = useState([]);
@@ -8,7 +9,7 @@ export default function TableViewer() {
 
   // Load table names when app loads
   useEffect(() => {
-    fetch("http://localhost:8000/tables")
+    fetch(`${BASE_URL}/tables`)
       .then((res) => res.json())
       .then(setTables)
       .catch((err) => console.error(err));
@@ -18,7 +19,7 @@ export default function TableViewer() {
   const loadTable = (tableName) => {
     setSelectedTable(tableName);
 
-    fetch(`http://localhost:8000/table/${tableName}`)
+    fetch(`${BASE_URL}/table/${tableName}`)
       .then((res) => res.json())
       .then((data) => {
         setData(data);
