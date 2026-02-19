@@ -6,52 +6,55 @@ export default function TableViewer() {
   const [data, setData] = useState([]);
   const [selectedTable, setSelectedTable] = useState("");
   const [showPopup, setShowPopup] = useState(false);
+  const [error, setError] = useState("");
 
-  // Load table names when app loads
+  // Load tables on mount
   useEffect(() => {
     fetchTables()
       .then(setTables)
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err);
+        setError("Unable to load tables");
+      });
   }, []);
 
-  // Load selected table data
   const loadTable = (tableName) => {
     setSelectedTable(tableName);
+    setError("");
 
     fetchTableData(tableName)
       .then((data) => {
         setData(data);
         setShowPopup(true);
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err);
+        setError("Unable to load table data");
+      });
   };
 
   return (
     <div style={{ padding: "20px" }}>
       <h2>Database Tables</h2>
 
-      {/* TABLE BUTTONS */}
+      {error && <p style={{ color: "red" }}>{error}</p>}
+
       <div style={{ marginBottom: "20px" }}>
-        {tables.map((table) => (
-          <button
-            key={table}
-            onClick={() => loadTable(table)}
-            style={{
-              margin: "5px",
-              padding: "10px 15px",
-              borderRadius: "6px",
-              border: "none",
-              background: "#1976d2",
-              color: "white",
-              cursor: "pointer",
-            }}
-          >
-            {table}
-          </button>
-        ))}
+        {tables.length > 0 ? (
+          tables.map((table) => (
+            <button
+              key={table}
+              onClick={() => loadTable(table)}
+              style={styles.button}
+            >
+              {table}
+            </button>
+          ))
+        ) : (
+          <p>No tables found</p>
+        )}
       </div>
 
-      {/* POPUP MODAL */}
       {showPopup && (
         <div style={styles.overlay}>
           <div style={styles.popup}>
@@ -73,7 +76,6 @@ export default function TableViewer() {
                     ))}
                   </tr>
                 </thead>
-
                 <tbody>
                   {data.map((row, i) => (
                     <tr key={i}>
@@ -95,6 +97,15 @@ export default function TableViewer() {
 }
 
 const styles = {
+  button: {
+    margin: "5px",
+    padding: "10px 15px",
+    borderRadius: "6px",
+    border: "none",
+    background: "#1976d2",
+    color: "white",
+    cursor: "pointer",
+  },
   overlay: {
     position: "fixed",
     top: 0,
