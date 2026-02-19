@@ -21,17 +21,20 @@ class TableRepository:
         conn = get_connection()
         cursor = conn.cursor()
 
-    # Validate table exists
+    # Get valid tables
         cursor.execute("""
         SELECT name FROM sqlite_master
-        WHERE type='table' AND name=?;
-        """, (table_name,))
-    
-        if not cursor.fetchone():
-            conn.close()
-            return []
+        WHERE type='table';
+        """)
+        valid_tables = [row["name"] for row in cursor.fetchall()]
 
-        cursor.execute(f'SELECT * FROM "{table_name}"')
+    # Validate table name
+        if table_name not in valid_tables:
+            conn.close()
+            return {"error": "Invalid table name"}
+
+    # Safe query after validation
+        cursor.execute(f"SELECT * FROM {table_name}")
         rows = cursor.fetchall()
 
         conn.close()

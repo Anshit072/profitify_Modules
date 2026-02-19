@@ -1,14 +1,12 @@
-from flask import Blueprint, jsonify
+from fastapi import APIRouter
 from services.table_service import TableService
 
-table_bp = Blueprint("table", __name__)
+router = APIRouter()
 
-@table_bp.route("/tables")
+@router.get("/tables")
 def get_tables():
-    data = TableService.fetch_tables()
-    return jsonify(data)
+    return TableService.fetch_tables()
 
-@table_bp.route("/table/<table_name>")
-def get_table(table_name):
-    data = TableService.fetch_table_data(table_name)
-    return jsonify(data)
+@router.get("/table/{table_name}")
+def get_table(table_name: str):
+    return TableService.fetch_table_data(table_name)

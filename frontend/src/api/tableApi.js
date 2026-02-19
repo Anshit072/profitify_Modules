@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = "http://localhost:8000";
 
 export const fetchTables = async () => {
   const res = await fetch(`${BASE_URL}/tables`);

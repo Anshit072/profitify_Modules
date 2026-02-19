@@ -8,7 +8,7 @@ export default function TableViewer() {
 
   // Load table names when app loads
   useEffect(() => {
-    fetch("http://localhost:5000/tables")
+    fetch("http://localhost:8000/tables")
       .then((res) => res.json())
       .then(setTables)
       .catch((err) => console.error(err));
@@ -18,7 +18,7 @@ export default function TableViewer() {
   const loadTable = (tableName) => {
     setSelectedTable(tableName);
 
-    fetch(`http://localhost:5000/table/${tableName}`)
+    fetch(`http://localhost:8000/table/${tableName}`)
       .then((res) => res.json())
       .then((data) => {
         setData(data);

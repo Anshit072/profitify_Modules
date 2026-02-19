@@ -1,11 +1,15 @@
-from flask import Flask
-from flask_cors import CORS
-from controllers.table_controller import table_bp
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from controllers.table_controller import router as table_router
 
-app = Flask(__name__)
-CORS(app)
+app = FastAPI()
 
-app.register_blueprint(table_bp)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-if __name__ == "__main__":
-    app.run(debug=True)
+app.include_router(table_router)
