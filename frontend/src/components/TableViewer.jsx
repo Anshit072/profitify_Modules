@@ -9,8 +9,7 @@ export default function TableViewer() {
 
   // Load table names when app loads
   useEffect(() => {
-    fetch(`${BASE_URL}/tables`)
-      .then((res) => res.json())
+    fetchTables()
       .then(setTables)
       .catch((err) => console.error(err));
   }, []);
@@ -19,11 +18,10 @@ export default function TableViewer() {
   const loadTable = (tableName) => {
     setSelectedTable(tableName);
 
-    fetch(`${BASE_URL}/table/${tableName}`)
-      .then((res) => res.json())
+    fetchTableData(tableName)
       .then((data) => {
         setData(data);
-        setShowPopup(true); // open popup
+        setShowPopup(true);
       })
       .catch((err) => console.error(err));
   };
@@ -96,7 +94,6 @@ export default function TableViewer() {
   );
 }
 
-/* POPUP STYLES */
 const styles = {
   overlay: {
     position: "fixed",
